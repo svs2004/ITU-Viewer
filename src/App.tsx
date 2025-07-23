@@ -196,9 +196,6 @@ function App() {
       // Создаем FormData
       const formData = new FormData();
       
-      // Добавляем модель как JSON строку
-      formData.append('requestModelString', JSON.stringify(mobileRequestModel));
-      
       // Добавляем файлы
       selectedFiles.forEach((file, index) => {
         formData.append('files', file);
@@ -228,7 +225,11 @@ function App() {
       }
       console.log('=======================================');
 
-      const response = await fetch('https://37.203.243.35:44317/api/Request/MobileAddWithFiles', {
+      // Кодируем JSON для передачи в URL
+      const encodedRequestModel = encodeURIComponent(JSON.stringify(mobileRequestModel));
+      const apiUrl = `https://37.203.243.35:44317/api/Request/MobileAddWithFiles?requestModelString=${encodedRequestModel}`;
+
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
