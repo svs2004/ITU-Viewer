@@ -228,6 +228,11 @@ function App() {
       }
       console.log('=======================================');
 
+      // Устанавливаем cookie с requestModelString
+      const requestModelString = JSON.stringify(mobileRequestModel);
+      document.cookie = `requestModelString=${encodeURIComponent(requestModelString)}; path=/; SameSite=Lax`;
+      console.log('8. Cookie установлен:', requestModelString);
+
       const response = await fetch('https://37.203.243.35:44317/api/Request/MobileAddWithFiles', {
         method: 'POST',
         headers: {
@@ -236,7 +241,7 @@ function App() {
         },
         body: formData,
         mode: 'cors',
-        credentials: 'omit',
+        credentials: 'include', // Включаем отправку cookies
       });
 
       const result = await response.json();
