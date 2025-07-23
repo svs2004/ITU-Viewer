@@ -196,27 +196,8 @@ function App() {
       // Создаем FormData
       const formData = new FormData();
       
-      // Добавляем модель как отдельные поля
-      formData.append('requestModel.Text', mobileRequestModel.Text);
-      formData.append('requestModel.mobilePersonModel.PersonId', mobileRequestModel.mobilePersonModel.PersonId.toString());
-      formData.append('requestModel.mobilePersonModel.Name', mobileRequestModel.mobilePersonModel.Name);
-      formData.append('requestModel.mobilePersonModel.Surename', mobileRequestModel.mobilePersonModel.Surename);
-      formData.append('requestModel.mobilePersonModel.Patronymic', mobileRequestModel.mobilePersonModel.Patronymic);
-      formData.append('requestModel.mobilePersonModel.ClientId', mobileRequestModel.mobilePersonModel.ClientId.toString());
-      formData.append('requestModel.mobilePersonModel.PositionId', mobileRequestModel.mobilePersonModel.PositionId.toString());
-      formData.append('requestModel.mobilePersonModel.OfficeId', mobileRequestModel.mobilePersonModel.OfficeId.toString());
-      formData.append('requestModel.mobilePersonModel.OurEmployee', mobileRequestModel.mobilePersonModel.OurEmployee.toString());
-      formData.append('requestModel.mobilePersonModel.BirthDay', mobileRequestModel.mobilePersonModel.BirthDay);
-      formData.append('requestModel.mobilePersonModel.FileVolume', mobileRequestModel.mobilePersonModel.FileVolume.toString());
-      formData.append('requestModel.mobilePersonModel.Company', mobileRequestModel.mobilePersonModel.Company);
-      formData.append('requestModel.mobilePersonModel.AttachmentVolume', mobileRequestModel.mobilePersonModel.AttachmentVolume.toString());
-      
-      // Добавляем контактную информацию
-      mobileRequestModel.mobilePersonModel.contactInformationModels.forEach((contact, index) => {
-        formData.append(`requestModel.mobilePersonModel.contactInformationModels[${index}].Type`, contact.Type);
-        formData.append(`requestModel.mobilePersonModel.contactInformationModels[${index}].Value`, contact.Value);
-        formData.append(`requestModel.mobilePersonModel.contactInformationModels[${index}].PersonId`, contact.PersonId.toString());
-      });
+      // Добавляем модель как JSON строку
+      formData.append('requestModelString', JSON.stringify(mobileRequestModel));
       
       // Добавляем файлы
       selectedFiles.forEach((file, index) => {
