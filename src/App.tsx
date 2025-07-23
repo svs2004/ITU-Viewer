@@ -196,17 +196,34 @@ function App() {
       // Создаем FormData
       const formData = new FormData();
       
-      // Добавляем JSON-строку ПЕРВОЙ
-      const requestModelString = JSON.stringify(mobileRequestModel);
-      formData.append('requestModelString', requestModelString);
+      // Добавляем модель как отдельные поля
+      formData.append('requestModel.Text', mobileRequestModel.Text);
+      formData.append('requestModel.mobilePersonModel.PersonId', mobileRequestModel.mobilePersonModel.PersonId.toString());
+      formData.append('requestModel.mobilePersonModel.Name', mobileRequestModel.mobilePersonModel.Name);
+      formData.append('requestModel.mobilePersonModel.Surename', mobileRequestModel.mobilePersonModel.Surename);
+      formData.append('requestModel.mobilePersonModel.Patronymic', mobileRequestModel.mobilePersonModel.Patronymic);
+      formData.append('requestModel.mobilePersonModel.ClientId', mobileRequestModel.mobilePersonModel.ClientId.toString());
+      formData.append('requestModel.mobilePersonModel.PositionId', mobileRequestModel.mobilePersonModel.PositionId.toString());
+      formData.append('requestModel.mobilePersonModel.OfficeId', mobileRequestModel.mobilePersonModel.OfficeId.toString());
+      formData.append('requestModel.mobilePersonModel.OurEmployee', mobileRequestModel.mobilePersonModel.OurEmployee.toString());
+      formData.append('requestModel.mobilePersonModel.BirthDay', mobileRequestModel.mobilePersonModel.BirthDay);
+      formData.append('requestModel.mobilePersonModel.FileVolume', mobileRequestModel.mobilePersonModel.FileVolume.toString());
+      formData.append('requestModel.mobilePersonModel.Company', mobileRequestModel.mobilePersonModel.Company);
+      formData.append('requestModel.mobilePersonModel.AttachmentVolume', mobileRequestModel.mobilePersonModel.AttachmentVolume.toString());
       
-      // Потом добавляем файлы
+      // Добавляем контактную информацию
+      mobileRequestModel.mobilePersonModel.contactInformationModels.forEach((contact, index) => {
+        formData.append(`requestModel.mobilePersonModel.contactInformationModels[${index}].Type`, contact.Type);
+        formData.append(`requestModel.mobilePersonModel.contactInformationModels[${index}].Value`, contact.Value);
+        formData.append(`requestModel.mobilePersonModel.contactInformationModels[${index}].PersonId`, contact.PersonId.toString());
+      });
+      
+      // Добавляем файлы
       selectedFiles.forEach((file, index) => {
         formData.append('files', file);
       });
       
       console.log('Отправляем обращение:', mobileRequestModel);
-      console.log('JSON-строка модели:', requestModelString);
       console.log('=== ДЕТАЛЬНАЯ ИНФОРМАЦИЯ ОБ ОТПРАВКЕ ===');
       console.log('1. Текст обращения:', appealText);
       console.log('2. Данные пользователя (userData):', userData);
@@ -222,25 +239,12 @@ function App() {
         });
       });
       console.log('6. Полная модель MobileRequestSendModel:', mobileRequestModel);
-      console.log('7. JSON-строка MobileRequestSendModel для requestModelString:');
-      console.log(requestModelString);
-      console.log('8. Длина JSON-строки:', requestModelString.length);
       
       // Проверяем, что FormData содержит правильные данные
-      console.log('9. Проверка FormData:');
+      console.log('7. Проверка FormData:');
       for (let [key, value] of formData.entries()) {
-        if (key === 'requestModelString') {
-          console.log(`   ${key} (длина: ${(value as string).length}):`, value);
-        } else {
-          console.log(`   ${key}:`, typeof value === 'object' ? `File: ${(value as File).name}` : value);
-        }
+        console.log(`   ${key}:`, typeof value === 'object' ? `File: ${(value as File).name}` : value);
       }
-      
-      // Дополнительная проверка - получаем значение напрямую
-      const directValue = formData.get('requestModelString');
-      console.log('10. Прямое получение requestModelString:', directValue);
-      console.log('11. Тип значения:', typeof directValue);
-      
       console.log('=======================================');
 
       const response = await fetch('https://37.203.243.35:44317/api/Request/MobileAddWithFiles', {
