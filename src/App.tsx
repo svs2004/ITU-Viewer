@@ -232,6 +232,7 @@ function App() {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
+          'X-Request-Model': JSON.stringify(mobileRequestModel),
           // НЕ устанавливаем Content-Type для FormData - браузер сделает это автоматически
         },
         body: formData,
